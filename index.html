@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <title>SoW Builder v0.1.0.</title>
+</head>
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        font-size: small;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    div.p-2.nav {
+        background-color: #29497b;
+        color: #ffffff;
+        width: 100px;
+    }
+
+    /* .container {
+        border-width: medium;
+        border-style: double;
+        border-color: #29497b;
+        border-radius: 5px;
+    } */
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Roboto Slab', serif;
+        background-color: #ffffff;
+        color: #29497b;
+    }
+
+    p {
+        text-align: justify;
+    }
+
+    .nav-link,
+    .nav-link:link {
+        color: #29497b;
+        background-color: #ffffff;
+        border-width: 1px;
+        border-color: #ffffff;
+        border-style: solid;
+        border-radius: 0px;
+        /* font-weight: bold; */
+    }
+
+    .nav-link:hover {
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #03abba;
+        border-color: #d9d9d6;
+        border-width: 1px;
+        border-style: solid;
+        border-right-style: none;
+        border-radius: 0px;
+
+    }
+
+    .nav-pills>a.nav-link.active {
+        font-weight: bold;
+        background-color: #29497b;
+        color: #ffffff;
+        border-color: #d9d9d6;
+        border-width: 1px;
+        border-style: solid;
+        border-right-style: none;
+        border-radius: 0px;
+    }
+
+    .row>.col-3 {
+        padding: 0px;
+        background-color: #d9d9d6;
+        border-color: #d9d9d6;
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-radius: 0px;
+    }
+
+    div.tab-content {
+        height: 440px;
+        padding: 10px;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+
+    .col-3,
+    .col-9 {
+        padding: 0px;
+    }
+
+    .btn,
+    .btn:focus {
+        background-color: #03abba;
+        border-color: #81cee4;
+        border-radius: 0px;
+        color: #ffffff;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn:hover {
+        background-color: #29497b;
+        color: #ffffff;
+        border-radius: 0px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="d-flex">
+                <div class="mr-auto p-2">
+                    <a href="index.html">
+                        <h1>SoW Builder</h1>
+                    </a>
+                </div>
+                <div class="p-2">
+                    <img src="https://isg-one.com/ResourcePackages/ISGBootstrap/assets/dist/images/isg-logo-stacked.svg"
+                        alt="ISG Logo with motto" height="64px">
+                </div>
+            </div>
+            <hr class="my-1">
+            <!-- <div class="d-flex justify-content-center">
+                <div class="p-2 nav"> Hello
+                </div>
+                <div class="p-2 nav"><i class="fas fa-cog" aria-hidden="true"></i> Settings
+                </div>
+                <div class="p-2 nav">
+                    <a onclick="goFS()">
+                        <i class="fas fa-expand" aria-hidden="true"></i>
+                        Full Screen
+                    </a>
+                </div>
+                
+                <div class="p-2 nav">
+                    <a href="index.html" style="color: #ffffff;">
+                        Refresh</a>
+                </div>
+            </div>
+            <hr class="my-1"> -->
+        </header>
+        <div class="row"
+            style="height: 450px; margin-left: 5px; margin-right: 5px; border: #d9d9d6; border-style: solid; border-width: 1px;">
+            <div class="col-3">
+                <div class="nav nav-pills flex-column" id="tabs" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-selected="true"><i class="fas fa-home"></i> Home</a>
+                    <a class="nav-link" id="momentum-tab" data-toggle="tab" href="#momentum" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fas fa-folder"></i>&nbsp;&nbsp;Momentum</a>
+                    <a class="nav-link" id="ipl-tab" data-toggle="tab" href="#ipl" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fas fa-folder"></i>&nbsp;&nbsp;ISG
+                        Provider Lens</a>
+                    <a class="nav-link" id="prob-tab" data-toggle="tab" href="#prob" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fas fa-folder"></i>&nbsp;&nbsp;ProBenchmark</a>
+                    <a class="nav-link" id="isg-performex-tab" data-toggle="tab" href="#isg-performex" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fas fa-folder"></i>&nbsp;&nbsp;ISG
+                        PerformeX</a>
+                    <a class="nav-link" id="ma-tab" data-toggle="tab" href="#ma" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fa fa-folder"></i>&nbsp;&nbsp;Momentum
+                        Accelerator</a>
+                    <a class="nav-link" id="standalones-tab" data-toggle="tab" href="#standalones" role="tab"
+                        aria-selected="false">&nbsp;&nbsp;<i class="fa fa-folder"></i>&nbsp;&nbsp;Standalones</a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="tabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <form>
+                            <fieldset class="border p-2">
+                                <legend class="w-auto" style="font-size: medium; font-family: 'Roboto Slab'; color: #29497b; font-weight: bold;">Your Legend</legend>
+
+                            </fieldset>
+                            
+                        </form>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel nisl interdum, semper
+                            magna vel, venenatis sem. Class
+                            aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam id
+                            luctus diam, ut laoreet
+                            dui. Maecenas in velit purus. Curabitur tempus tortor sit amet quam tristique, non convallis
+                            arcu tempor. Suspendisse
+                            potenti. Integer a varius dui, quis varius ante.
+                        </p>
+                        <!-- <p>
+                            Donec vehicula eget nisl vitae aliquet. Cras scelerisque lorem eu diam vestibulum, quis
+                            sagittis quam scelerisque. Fusce
+                            rutrum congue bibendum. Donec massa sem, ultricies nec euismod sit amet, semper eu risus.
+                            Phasellus arcu nulla, rhoncus
+                            non ipsum at, dignissim consectetur dolor. Nulla facilisis ligula purus, et euismod ante
+                            consectetur eu. Proin eget
+                            congue nulla. Aenean tempor, turpis ut tincidunt accumsan, ipsum eros porttitor odio, sit
+                            amet mattis est justo id urna.
+                            Suspendisse leo felis, iaculis nec fermentum a, consectetur pulvinar tortor. Nulla tincidunt
+                            blandit lectus, id posuere
+                            dui luctus quis. Suspendisse urna odio, venenatis laoreet rhoncus ut, lobortis id ante.
+                        </p>
+                        <p>
+                            Duis dapibus ligula vel odio mattis, eget vehicula leo sollicitudin. Fusce risus ex, maximus
+                            at tellus ut, congue
+                            scelerisque nibh. Praesent vitae quam sollicitudin diam rhoncus venenatis sed in odio. Nulla
+                            fringilla tellus nibh, sed
+                            porta eros luctus ac. Integer eu accumsan ipsum. Sed pellentesque, metus eu ultricies
+                            tempus, nisi lacus rhoncus quam,
+                            sit amet suscipit velit turpis a lorem. Morbi nec sapien vitae risus suscipit egestas vel ut
+                            urna. Nam eleifend
+                            fermentum convallis. Integer rhoncus augue elit, sit amet accumsan est facilisis eget. Sed
+                            quis pretium dui, nec
+                            efficitur arcu.
+                        </p>
+                        <p>
+                            Integer malesuada nunc non mi varius feugiat sit amet eu nunc. Nulla facilisi. Vestibulum
+                            aliquam justo dictum fermentum
+                            tristique. Ut finibus malesuada ligula ac sagittis. Vivamus at purus elit. Vestibulum a
+                            augue rutrum, dictum mi eget,
+                            tempus dui. Mauris posuere enim id elementum efficitur. Curabitur a bibendum mi. Vivamus id
+                            dui sit amet magna faucibus
+                            commodo sed nec arcu. Nulla rutrum justo et nibh porta viverra. Nulla vitae fermentum sem.
+                            Praesent eget pellentesque
+                            felis, vel viverra nisi. Integer nec dignissim turpis. Fusce congue odio sed elit
+                            condimentum pulvinar. Phasellus nunc
+                            orci, semper at urna non, porttitor placerat tellus.
+                        </p>
+                        <p>
+                            Suspendisse in dictum tellus. Morbi placerat finibus metus, ut fermentum nulla luctus sed.
+                            Nam laoreet mollis nisl quis
+                            hendrerit. Quisque finibus interdum venenatis. Duis a nisi eros. Proin auctor fermentum
+                            ornare. Suspendisse ac libero et
+                            massa bibendum vehicula in ut turpis. Maecenas ultrices, tortor id feugiat porttitor, elit
+                            erat rhoncus ex, nec rhoncus
+                            arcu tellus in metus. Praesent facilisis erat eleifend sem mattis posuere ut vel enim. Sed
+                            tincidunt, mi eu aliquam
+                            viverra, turpis nunc viverra massa, sit amet pretium sapien leo quis lacus. In hac habitasse
+                            platea dictumst. Aenean sit
+                            amet egestas ante. Nam mi elit, ullamcorper ac imperdiet eget, feugiat eget est. Duis in
+                            cursus libero, vitae aliquet
+                            tortor. Praesent et justo orci.
+                        </p>
+                        <p>
+                            Vivamus magna sem, viverra non sollicitudin vitae, blandit ac felis. Aenean finibus massa
+                            quis odio maximus,
+                            pellentesque ultrices metus aliquam. Mauris nulla justo, consequat nec porta nec, sodales
+                            sed nibh. Cras vulputate
+                            volutpat magna at iaculis. Integer id aliquet erat. Suspendisse sagittis nisl sapien. Sed
+                            viverra ex ipsum, non sodales
+                            nibh luctus vel. Morbi ac ultricies lectus, et ultrices risus. Integer quis quam at massa
+                            interdum faucibus id sit amet
+                            risus.
+                        </p>
+                        <p>
+                            Nulla eu ipsum arcu. Aliquam vehicula et nibh nec iaculis. Nullam ornare, odio sed fringilla
+                            tristique, est ipsum luctus
+                            diam, placerat tempor metus ipsum non ante. Quisque dignissim nisl feugiat gravida blandit.
+                            Nulla eleifend massa
+                            interdum enim pellentesque varius. Maecenas gravida mauris scelerisque, consequat purus ut,
+                            cursus risus. Vivamus
+                            volutpat tellus eu odio consequat sagittis. Proin lacinia nulla eu lacinia lobortis. Proin
+                            cursus risus ipsum, id
+                            vulputate leo dictum sed. Vestibulum eu vehicula enim, convallis dignissim nisi. Phasellus
+                            porta ipsum felis, nec
+                            commodo elit pulvinar vel. Nulla egestas ipsum purus, quis tincidunt sapien lobortis sed.
+                            Aenean dui mauris, ultricies a
+                            egestas ultricies, bibendum eget ex.
+                        </p>
+                        <p>
+                            Sed semper quam vel cursus ultrices. Nulla lorem purus, feugiat in finibus at, laoreet eu
+                            magna. Morbi euismod rhoncus
+                            hendrerit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+                            turpis egestas. Nullam eu
+                            facilisis mauris. Sed tempor tortor nec tristique posuere. Fusce dolor felis, tempor vitae
+                            tempus accumsan, ullamcorper
+                            in massa. Fusce sagittis diam enim, ac posuere libero auctor sed. Nam fringilla lorem lacus,
+                            at condimentum mi faucibus
+                            finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla eu sapien at
+                            risus congue consequat et sit
+                            amet metus. Mauris et tortor nec purus semper pellentesque quis at nisi. Aenean ut lobortis
+                            odio, eu hendrerit erat.
+                            Nunc placerat convallis tortor nec tempor.
+                        </p>
+                        <p>
+                            Nam convallis elit ut nisl fringilla, vitae condimentum justo vestibulum. Mauris dolor
+                            tellus, rutrum rhoncus est nec,
+                            vehicula porta tortor. Nulla porttitor sapien id iaculis faucibus. Nullam non vestibulum
+                            arcu, sit amet feugiat sapien.
+                            Integer et hendrerit nulla. Maecenas vel ligula id lorem venenatis ornare. Etiam vestibulum
+                            ornare nibh, in sagittis sem
+                            dictum sit amet.
+                        </p>
+                        <p>
+                            Nulla nec leo fermentum, sagittis ipsum eget, semper ex. Donec eleifend ante erat, et
+                            euismod sem eleifend eu. Ut dictum
+                            sed tortor et porta. Phasellus maximus mi sed porttitor lobortis. Suspendisse diam turpis,
+                            malesuada tincidunt commodo
+                            tincidunt, finibus et urna. Morbi finibus euismod magna sed volutpat. Aenean ac aliquet
+                            felis, ultrices euismod nisi.
+                            Quisque consequat elit quis porttitor commodo. Cras aliquam orci eu nulla sagittis,
+                            vestibulum sagittis neque viverra.
+                        </p> -->
+                    </div>
+                    <div class="tab-pane fade" id="momentum" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <p>
+                            Morbi justo massa, sodales in mauris nec, mollis rhoncus ipsum. Integer id orci purus. In
+                            semper elit id nisi condimentum fermentum. Aenean justo magna, aliquet at faucibus at,
+                            mollis eget arcu. Vestibulum mi enim, tempor sit amet mi ut, dignissim vulputate magna.
+                            Suspendisse potenti. Maecenas vel eros quis orci bibendum sollicitudin eget vitae urna.
+                            Quisque nulla magna, pretium sit amet libero et, cursus convallis lacus. Fusce blandit
+                            interdum magna, sed lobortis purus.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="ipl" role="tabpanel" aria-labelledby="messages-tab">
+                        <p>
+                            Sed feugiat tincidunt pellentesque. Ut mattis, velit vel finibus mollis, eros risus egestas
+                            urna, ut accumsan felis tellus non lectus. Ut nec mollis purus, et lacinia diam. Praesent
+                            erat sapien, consectetur sit amet libero a, vestibulum rhoncus urna. Praesent elementum diam
+                            eget eleifend blandit. Aliquam nulla eros, interdum non augue et, ultricies feugiat sapien.
+                            Curabitur nulla sapien, vulputate eget mi ac, hendrerit aliquet est. Donec vel tellus quam.
+                            Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc a libero tellus. Morbi
+                            hendrerit tempor lorem, quis dictum tellus egestas non. Duis aliquet diam elit, id posuere
+                            elit consequat at. Quisque finibus felis sit amet egestas pellentesque.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="prob" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                        <p>Vivamus euismod purus dolor, id suscipit sapien blandit a. Integer condimentum scelerisque
+                            massa eu aliquet.
+                            Curabitur faucibus purus ac erat mattis, non ultrices orci convallis. Suspendisse at est
+                            erat. Sed posuere urna eget
+                            risus posuere iaculis. Nullam gravida dui dapibus, viverra libero vel, accumsan libero.
+                            Nullam rhoncus eros ante, eu
+                            pellentesque lectus ullamcorper sit amet. Fusce pharetra nulla ac imperdiet tincidunt.
+                            Aenean metus nibh, blandit in
+                            nunc vel, elementum placerat mi. Morbi mauris orci, cursus nec rhoncus quis, egestas sed
+                            lectus.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="isg-performex" role="tabpanel"
+                        aria-labelledby="v-pills-settings-tab">
+                        <p>
+                            Donec vehicula arcu nec lobortis mollis. Quisque ut mi sit amet mi euismod egestas. Praesent
+                            vel sapien ut neque
+                            porttitor pharetra et eu ligula. Mauris volutpat pellentesque velit tincidunt condimentum.
+                            Aliquam ultrices magna
+                            nec elit cursus, ac faucibus massa venenatis. Pellentesque ac egestas purus. Nulla facilisi.
+                            Aliquam semper
+                            tincidunt vehicula. Donec placerat interdum lorem sit amet faucibus. Curabitur venenatis vel
+                            arcu eget lobortis.
+                            Vivamus velit libero, vehicula non pulvinar in, bibendum a turpis. Praesent malesuada
+                            accumsan odio, eu dictum est
+                            tempus vel. Sed rutrum ut eros nec viverra. Suspendisse eget nibh quis erat sollicitudin
+                            euismod at sed ex. Aenean
+                            at mauris porttitor velit interdum mollis nec id sem. Donec porttitor vel eros a fermentum.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="ma" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                        <p>
+                            Duis eu orci euismod neque lobortis sagittis. Etiam felis magna, gravida non quam sit amet,
+                            molestie malesuada
+                            metus. Fusce varius maximus venenatis. Curabitur neque felis, hendrerit non iaculis ac,
+                            volutpat at leo. Mauris eu
+                            porta purus, vitae laoreet dolor. Sed ut rhoncus augue, ut varius ante. Nulla lacus nibh,
+                            lacinia sed lobortis et,
+                            maximus id tellus. Mauris sit amet sodales lorem. Morbi ligula tellus, pharetra eu tortor
+                            eget, convallis dapibus
+                            nunc. Praesent ullamcorper mattis porta.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="standalones" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                        <p>
+                            Ut dictum nisl eu nisl rhoncus, in bibendum eros cursus. Aliquam cursus, ligula vel feugiat
+                            venenatis, turpis libero
+                            semper leo, eget euismod justo mauris ornare odio. Nulla enim nibh, varius tincidunt ipsum
+                            non, fringilla aliquet
+                            nunc. Mauris egestas leo eros, sed fermentum ante aliquet et. Aliquam aliquet odio in libero
+                            venenatis, a iaculis ex
+                            auctor. Pellentesque at urna ut nibh fringilla ornare in id est. Fusce iaculis nulla at
+                            ullamcorper cursus.
+                            Phasellus feugiat porta orci, a imperdiet nunc. Mauris elementum hendrerit felis vitae
+                            dictum. Maecenas suscipit
+                            erat vel tincidunt tincidunt. Etiam nunc ex, aliquam at commodo in, feugiat sed elit.
+                            Interdum et malesuada fames ac
+                            ante ipsum primis in faucibus. Phasellus ut turpis eu nibh bibendum commodo et nec ex.
+                            Aliquam porta augue ut leo
+                            maximus, id pellentesque ex porttitor. In hac habitasse platea dictumst. Suspendisse aliquet
+                            tortor magna, sed
+                            volutpat velit tempus eget.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <div class="p-2">
+                <div id="alert" class="alert text-danger" role="alert" style="height: 40px; border-radius: 0px;">
+                    Alert Message
+                </div>
+            </div>
+            <div class="p-2">
+                <button class="btn">Create
+                    SoW</button>
+            </div>
+        </div>
+        <footer>
+            <hr class="my-1">
+            <div class="d-flex justify-content-sm-between">
+                <div class="mr-auto p-2"> We are using node <script>
+                        document.write(process.versions.node)
+                    </script>,
+                    Chrome <script>
+                        document.write(process.versions.chrome)
+                    </script>,
+                    and Electron <script>
+                        document.write(process.versions.electron)
+                    </script>.
+                </div>
+                <address class="p-2"> designed and developed by <a
+                        href="mailto:aravind.sd@isg-one.com">aravind.sd@isg-one.com</a> from the Data Labs
+                </address>
+            </div>
+        </footer>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script> -->
+    <script src="node_modules/popper.js/dist/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+        require('jquery')
+        require('popper.js')
+        require('bootstrap')
+    </script>
+    <script>
+        function goFS() {
+            if (!document.documentElement.requestFullscreen()) {
+                return document.documentElement.requestFullscreen();
+            } else {
+                return document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+
+</html>
